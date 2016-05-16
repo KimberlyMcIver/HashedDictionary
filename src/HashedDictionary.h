@@ -17,6 +17,7 @@ template<class KeyType, class ItemType>
 class HashedDictionary : public DictionaryInterface<KeyType, ItemType> {
 private:
     HashedEntry<KeyType, ItemType> **hashTable;  // Array of pointers to entries
+    HashedEntry<KeyType, ItemType> *entrytoAddPtr;
     int itemCount;
     int hashTableSize; //Default value should be assigned to 101
 
@@ -147,38 +148,58 @@ void HashedDictionary<KeyType, ItemType>::destroyDictionary() {
 
 template<class KeyType, class ItemType>
 bool HashedDictionary<KeyType, ItemType>::isEmpty() const {
-    //TODO
+   /* if(hashTableSize == 0)
+        return true;
+        */
+    if(itemCount == 0)
+        return true;
 }
 
 template<class KeyType, class ItemType>
 int HashedDictionary<KeyType, ItemType>::getNumberOfItems() const {
     //TODO
+    return itemCount;
 }
 
 template<class KeyType, class ItemType>
-bool HashedDictionary<KeyType, ItemType>::add(const KeyType &searchKey, const ItemType &newItem) {
+bool HashedDictionary<KeyType, ItemType>::add(const KeyType& searchKey, const ItemType& newItem) {
     //TODO
-    return false;
+    // create entry to add to dictionary
+ int itemHashIndex = getHashIndex(searchKey);
+
+    //add the entry to the chain at itemHashIndex
+    if (hashTable[itemHashIndex] == nullptr )
+    {
+        hashTable[itemHashIndex] = entrytoAddPtr;
+    }
+
+    else
+    {
+        entrytoAddPtr->setNext (hashTable[itemHashIndex]);
+        hashTable[itemHashIndex] = entrytoAddPtr;
+    }
+    return true;
 }
+
 
 template<class KeyType, class ItemType>
 bool HashedDictionary<KeyType, ItemType>::remove(const KeyType &searchKey) {
     //TODO
-    return false;
+    return true;
 }
-
+/*
 template<class KeyType, class ItemType>
 ItemType HashedDictionary<KeyType, ItemType>::getItem(const KeyType &searchKey) const {
     //TODO
 
-    return nullptr;
+    return item;
 }
-
+*/
 template<class KeyType, class ItemType>
 bool HashedDictionary<KeyType, ItemType>::contains(const KeyType &searchKey) const {
     //TODO
 
-    return false;
+    return true;
 }
 
 
