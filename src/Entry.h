@@ -15,7 +15,6 @@ public:
     Entry(KeyType searchKey, ItemType newEntry);
 
     ItemType getItem() const;
-
     KeyType getKey() const;
 
     void setItem(const ItemType &newEntry);

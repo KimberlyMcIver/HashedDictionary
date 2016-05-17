@@ -82,37 +82,52 @@ void runHashedEntryExamples() {
 
 void runOurDictionaryStuff() {
 
-    cout << "Running example code after our Dictionary has been implemented\n";
+    cout << "---- ADDITIONAL TESTING ----- \n";
     auto dict1 = new HashedDictionary<int, string>();
+    try {
+            dict1->getItem(10);
 
+    }
+    catch(int e)
+    {
+        std::cout << "Caught exception when trying to get an item from an empty dictionary.  This is good! :-)" << std::endl;
+    }
 
-    dict1->add(10, "10");
-    dict1->add(20, "20");
-    cout << dict1->contains(10);
+    cout << "Adding \"apple\" to index 10, banana to 20, and carrot to 30" << endl;
+    dict1->add(10, "apple");
+    dict1->add(20, "banana");
+    dict1->add(30, "carrot");
+
+//    cout << "Checking for item at 10 (apple)" << endl;
+    cout << "Is anything in index 10? (expect 1 for true):  " << dict1->contains(10);
     cout << '\n';
-    cout << dict1->getItem(10);
+    cout << "What's in index 10? (expect apple): " << dict1->getItem(10);
 
-
+    //either this should return an array with 11 possible items (size of 11)
     HashedDictionary<int, string> *castedPointer = dynamic_cast<HashedDictionary<int, string> *>(dict1);
+    cout << '\n';
+    //or all of the 10s below here should be 9s
+    cout << "Checking index 10 via dynamic cast of pointer (expect apple): " << castedPointer->getItem(10);
+
+    //additionally, we can not set an object value to a string
+    //(*castedPointer)[10] = "40";
+
 
     cout << '\n';
-    cout << castedPointer->getItem(10);
-
-    (*castedPointer)[10] = "40";
-
-
-    cout << '\n';
-
-    cout << castedPointer->getItem(10);
-
+//    cout << castedPointer->getItem(10);
     HashedDictionary<int, string> dictObject;
-    dictObject.add(10, "10");
-    dictObject.add(20, "20");
+
+    std::cout << "Attempting to replace [10] apple with alligator and [20] banana with bear..." << std::endl;
+    dictObject.add(10, "alligator");
+    dictObject.add(20, "bear");
+
+    cout << "Checking index 10 (expect alligator): " << dictObject.getItem(10);
+//    dictObject[10] = "40";
     cout << '\n';
-    cout << dictObject.getItem(10);
-    dictObject[10] = "40";
-    cout << '\n';
-    cout << dictObject.getItem(10);
+    cout <<"Checking index 20 (expect banana): " << dictObject.getItem(20);
+    std::cout << std::endl;
+    cout << "---- ADDITIONAL TESTING COMPLETE ----- \n";
+
 }
 
 int main() {

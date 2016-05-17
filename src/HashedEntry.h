@@ -13,6 +13,9 @@ private:
 
 
 public:
+    ItemType getItem();
+    KeyType getKey();
+
     HashedEntry(); //done
 
     HashedEntry(KeyType searchKey, ItemType newEntry); // done
@@ -40,13 +43,33 @@ public:
 
 //TODO Implement the necessary functions
 
+template<class KeyType, class ItemType>
+KeyType HashedEntry<KeyType, ItemType>::getKey()
+{
+    return searchKey;
+}
+
+template<class KeyType, class ItemType>
+ItemType HashedEntry<KeyType, ItemType>::getItem()
+{
+    return item;
+}
+
+
+
 
 template<class KeyType, class ItemType>
 HashedEntry<KeyType, ItemType>::HashedEntry() { }
 
 template<class KeyType, class ItemType>
 HashedEntry<KeyType, ItemType>::HashedEntry(KeyType itemKey, ItemType newEntry)
-: item(newEntry), searchKey(itemKey) { }
+{
+    //std::cout << "CREATING A NEW HASHED ENTRY WITH VALUE: " << newEntry << std::endl;
+    item = newEntry;
+    searchKey = itemKey;
+}
+
+//HashedEntry<KeyType, ItemType>::HashedEntry(KeyType itemKey, ItemType newEntry) : item(newEntry), searchKey(itemKey) { }
 
 template<class KeyType, class ItemType>
 HashedEntry<KeyType, ItemType>::HashedEntry(KeyType itemKey, ItemType newEntry, HashedEntry<KeyType, ItemType> *newEntryPtr)

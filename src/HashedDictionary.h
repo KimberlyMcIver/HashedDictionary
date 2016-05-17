@@ -17,16 +17,21 @@ template<class KeyType, class ItemType>
 class HashedDictionary : public DictionaryInterface<KeyType, ItemType> {
 private:
     HashedEntry<KeyType, ItemType> **hashTable;  // Array of pointers to entries
-    HashedEntry<KeyType, ItemType> *entrytoAddPtr;
+
+   // HashedEntry<KeyType, ItemType> *entrytoAddPtr;
+
     int itemCount;
     int hashTableSize; //Default value should be assigned to 101
+
+    //ItemType itemStored;
+
 
     int getHashIndex(const KeyType &itemKey) const;
 
     void destroyDictionary();
 
 public:
-
+    HashedEntry<KeyType, ItemType> *entrytoAddPtr;
 
     virtual ~HashedDictionary();
 
@@ -51,6 +56,7 @@ public:
     std::vector<ItemType> toVector() const override;
 
     HashedEntry<KeyType, ItemType> &operator[](KeyType key);
+
 
 
 };
@@ -144,6 +150,9 @@ template<class KeyType, class ItemType>
 void HashedDictionary<KeyType, ItemType>::destroyDictionary() {
     //TODO
 
+    hashTable = new HashedEntry<KeyType, ItemType> *[DEFAULT_SIZE];
+
+
 }
 
 template<class KeyType, class ItemType>
@@ -151,9 +160,12 @@ bool HashedDictionary<KeyType, ItemType>::isEmpty() const {
    /* if(hashTableSize == 0)
         return true;
         */
-    if(itemCount == 0)
+    if(itemCount == 0){
         return true;
-}
+    }
+
+        return false;
+} // end of isEmpty
 
 template<class KeyType, class ItemType>
 int HashedDictionary<KeyType, ItemType>::getNumberOfItems() const {
@@ -165,41 +177,187 @@ template<class KeyType, class ItemType>
 bool HashedDictionary<KeyType, ItemType>::add(const KeyType& searchKey, const ItemType& newItem) {
     //TODO
     // create entry to add to dictionary
- int itemHashIndex = getHashIndex(searchKey);
+    int itemHashIndex = getHashIndex(searchKey);
+//    std::cout << "Attepting to add..." << std::endl;
+
+
 
     //add the entry to the chain at itemHashIndex
     if (hashTable[itemHashIndex] == nullptr )
     {
-        hashTable[itemHashIndex] = entrytoAddPtr;
+//        std::cout << "creating new item at index " << itemHashIndex << std::endl;
+        HashedEntry<KeyType, ItemType> *newEntry = new HashedEntry<KeyType, ItemType>(searchKey, newItem);
+//        std::cout << "Item Created: " << newEntry->getItem() << ":" << newEntry->getKey() << std::endl;
+        hashTable[itemHashIndex] = newEntry;
     }
 
     else
     {
+//        std::cout << "replacing item at index " << itemHashIndex << std::endl;
         entrytoAddPtr->setNext (hashTable[itemHashIndex]);
         hashTable[itemHashIndex] = entrytoAddPtr;
     }
+
+    itemCount++;
     return true;
 }
+
 
 
 template<class KeyType, class ItemType>
 bool HashedDictionary<KeyType, ItemType>::remove(const KeyType &searchKey) {
-    //TODO
+
+    /*
+            // TODO
     return true;
+*/
+
+    for (int i = 0; i < hashTableSize; i++) {
+
+
+//        std::cout << "RUNNING" << std::endl;
+        HashedEntry<KeyType, ItemType> *chainPtr = hashTable[i];
+        if (chainPtr == nullptr) {
+//            std::cout << "CHAIN POINTER IS NOT INITIALIZED" << std::endl;
+        }
+        else {
+            //std::cout << "Chain pointer found at index " << i << std::endl;
+            while (chainPtr != nullptr) {
+                ItemType currentItem = chainPtr->getItem();
+                //std::cout << "Current item: " << currentItem << std::endl;
+                //(*hashTable)->visit(currentItem);
+                chainPtr = chainPtr->getNext();
+            }
+
+            //ItemType currentItem = chainPtr->getItem();
+            //KeyType currentKey = chainPtr->getKey();
+            //std::cout << "Current item: " << currentItem << std::endl;
+            //something in here is crashing
+            //std::cout << i << ":" << hashTable[i]->getKey() << " : " << hashTable[i]->getItem() << std::endl;
+            //std::cout << hashTable[i]->getItem() << std::endl;
+
+
+            if (hashTable[i]->getKey() == searchKey) {
+                hashTable[i] = NULL;
+                return true;
+            }
+        }
+    }
+    return false;
+
 }
-/*
+
+
 template<class KeyType, class ItemType>
 ItemType HashedDictionary<KeyType, ItemType>::getItem(const KeyType &searchKey) const {
-    //TODO
 
-    return item;
+
+    //TODO
+    if(itemCount == 0)
+    {
+        throw 1;
+    }
+    //entrytoAddPtr = item;
+    // return "k"; // item;
+    // itemStored entrytoAddPtr;
+    //return itemStored;
+    /*
+     *
+   for (int index = 0; index < hashTableSize; index++) {
+        HashedEntry<KeyType, ItemType> *chainPtr = hashTable[index];
+        while (chainPtr != nullptr) {
+            ItemType currentItem = chainPtr->getItem();
+            visit(currentItem);
+            chainPtr = chainPtr->getNext();
+        }
+    }
+
+     *
+     */
+
+    //std::cout << "Items stored: " << itemCount << " table size: " << hashTableSize << std::endl;
+
+
+    //itemcount is always 1 for some reason
+    for (int i = 0; i < hashTableSize; i++) {
+
+
+//        std::cout << "RUNNING" << std::endl;
+        HashedEntry<KeyType, ItemType> *chainPtr = hashTable[i];
+        if(chainPtr == nullptr) {
+//            std::cout << "CHAIN POINTER IS NOT INITIALIZED" << std::endl;
+        }
+        else {
+            //std::cout << "Chain pointer found at index " << i << std::endl;
+            while (chainPtr != nullptr) {
+                ItemType currentItem = chainPtr->getItem();
+                //std::cout << "Current item: " << currentItem << std::endl;
+                //(*hashTable)->visit(currentItem);
+                chainPtr = chainPtr->getNext();
+            }
+
+            //ItemType currentItem = chainPtr->getItem();
+            //KeyType currentKey = chainPtr->getKey();
+            //std::cout << "Current item: " << currentItem << std::endl;
+            //something in here is crashing
+            //std::cout << i << ":" << hashTable[i]->getKey() << " : " << hashTable[i]->getItem() << std::endl;
+            //std::cout << hashTable[i]->getItem() << std::endl;
+
+
+            if (hashTable[i]->getKey() == searchKey) {
+                return hashTable[i]->getItem();
+            }
+        }
+//        std::cout << "RAN" << std::endl;
+
+    }
+
+    return "NOT FOUND";
+   // {
+     //   throw exception();
+    //}
+
 }
-*/
+
 template<class KeyType, class ItemType>
 bool HashedDictionary<KeyType, ItemType>::contains(const KeyType &searchKey) const {
     //TODO
 
-    return true;
-}
+    //itemcount is always 1 for some reason
+    for (int i = 0; i < hashTableSize; i++) {
 
+
+//        std::cout << "RUNNING" << std::endl;
+        HashedEntry<KeyType, ItemType> *chainPtr = hashTable[i];
+        if(chainPtr == nullptr) {
+//            std::cout << "CHAIN POINTER IS NOT INITIALIZED" << std::endl;
+        }
+        else {
+            //std::cout << "Chain pointer found at index " << i << std::endl;
+            while (chainPtr != nullptr) {
+                ItemType currentItem = chainPtr->getItem();
+                //std::cout << "Current item: " << currentItem << std::endl;
+                //(*hashTable)->visit(currentItem);
+                chainPtr = chainPtr->getNext();
+            }
+
+            //ItemType currentItem = chainPtr->getItem();
+            //KeyType currentKey = chainPtr->getKey();
+            //std::cout << "Current item: " << currentItem << std::endl;
+            //something in here is crashing
+            //std::cout << i << ":" << hashTable[i]->getKey() << " : " << hashTable[i]->getItem() << std::endl;
+            //std::cout << hashTable[i]->getItem() << std::endl;
+
+
+            if (hashTable[i]->getKey() == searchKey) {
+                return true;
+            }
+        }
+//        std::cout << "RAN" << std::endl;
+
+    }
+
+
+    return false;
+}
 
