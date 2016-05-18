@@ -151,7 +151,7 @@ void HashedDictionary<KeyType, ItemType>::destroyDictionary() {
     //TODO
 
     hashTable = new HashedEntry<KeyType, ItemType> *[DEFAULT_SIZE];
-
+    itemCount = 0;
 
 }
 
@@ -177,7 +177,20 @@ template<class KeyType, class ItemType>
 bool HashedDictionary<KeyType, ItemType>::add(const KeyType& searchKey, const ItemType& newItem) {
     //TODO
     // create entry to add to dictionary
+//    std::cout << "Beginning to find " << searchKey << std::endl;
     int itemHashIndex = getHashIndex(searchKey);
+//    std::cout << "Index found: " << itemHashIndex << std::endl;
+
+    /*
+    if(itemHashIndex > hashTableSize)
+    {
+        std::cout << "Index " << itemHashIndex << " beyond " << hashTableSize;
+        //int newIndexFoo = itemHashIndex%hashTableSize;
+        itemHashIndex = 0;
+        //itemHashIndex = itemHashIndex%hashTableSize;
+        std::cout << "Truncated to " << itemHashIndex << std::endl;
+    }*/
+
 //    std::cout << "Attepting to add..." << std::endl;
 
 
@@ -185,20 +198,26 @@ bool HashedDictionary<KeyType, ItemType>::add(const KeyType& searchKey, const It
     //add the entry to the chain at itemHashIndex
     if (hashTable[itemHashIndex] == nullptr )
     {
+//        std::cout << "Creating new" << std::endl;
 //        std::cout << "creating new item at index " << itemHashIndex << std::endl;
-        HashedEntry<KeyType, ItemType> *newEntry = new HashedEntry<KeyType, ItemType>(searchKey, newItem);
+        HashedEntry<KeyType, ItemType> *newEntry = new HashedEntry<KeyType, ItemType>(itemHashIndex, newItem);
 //        std::cout << "Item Created: " << newEntry->getItem() << ":" << newEntry->getKey() << std::endl;
         hashTable[itemHashIndex] = newEntry;
+        itemCount++;
+
     }
 
     else
     {
 //        std::cout << "replacing item at index " << itemHashIndex << std::endl;
-        entrytoAddPtr->setNext (hashTable[itemHashIndex]);
-        hashTable[itemHashIndex] = entrytoAddPtr;
+        //entrytoAddPtr->setNext (hashTable[itemHashIndex]);
+        HashedEntry<KeyType, ItemType> *replaceEntry = new HashedEntry<KeyType, ItemType>(itemHashIndex, newItem);
+        replaceEntry->setNext(hashTable[itemHashIndex]);
+
+        hashTable[itemHashIndex] = replaceEntry; //->setItem(newItem);// = entrytoAddPtr;
+//        std::cout << "Done" << std::endl;
     }
 
-    itemCount++;
     return true;
 }
 
@@ -236,13 +255,36 @@ bool HashedDictionary<KeyType, ItemType>::remove(const KeyType &searchKey) {
             //std::cout << i << ":" << hashTable[i]->getKey() << " : " << hashTable[i]->getItem() << std::endl;
             //std::cout << hashTable[i]->getItem() << std::endl;
 
+            if(hashTable[i] != nullptr)
+            {
+                if (hashTable[i]->getKey() == searchKey) {
 
-            if (hashTable[i]->getKey() == searchKey) {
-                hashTable[i] = NULL;
-                return true;
+                    HashedEntry<KeyType, ItemType> *prior = nullptr;
+                    HashedEntry<KeyType, ItemType> *toRemove = hashTable[i];
+                    while(toRemove->getNext() != nullptr)
+                    {
+//                        std::cout << "Stepping back..." << std::endl;
+                        prior = toRemove;
+                        toRemove = toRemove->getNext();
+                    }
+                    if(prior == nullptr) //then it was the first item in that chain, drop the chain
+                    {
+                        hashTable[i] = nullptr;
+                    }
+                    else {
+//                        std::cout << std::endl << "Removing..." << hashTable[i]->getItem() << std::endl;
+
+                        prior->setNext(nullptr);
+                        toRemove = nullptr;
+//                    hashTable[i] = NULL;
+                    }
+                    itemCount--;
+                    return true;
+                }
             }
         }
     }
+
     return false;
 
 }
@@ -255,7 +297,7 @@ ItemType HashedDictionary<KeyType, ItemType>::getItem(const KeyType &searchKey) 
     //TODO
     if(itemCount == 0)
     {
-        throw 1;
+        throw std::exception();
     }
     //entrytoAddPtr = item;
     // return "k"; // item;
@@ -305,6 +347,7 @@ ItemType HashedDictionary<KeyType, ItemType>::getItem(const KeyType &searchKey) 
 
 
             if (hashTable[i]->getKey() == searchKey) {
+                std::cout << "Found item at index " << i << std::endl;
                 return hashTable[i]->getItem();
             }
         }
@@ -312,6 +355,8 @@ ItemType HashedDictionary<KeyType, ItemType>::getItem(const KeyType &searchKey) 
 
     }
 
+    std::cout << "NOT FOUND " << std::endl;
+    throw std::exception();
     return "NOT FOUND";
    // {
      //   throw exception();

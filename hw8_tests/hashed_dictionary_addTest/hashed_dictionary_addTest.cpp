@@ -31,7 +31,9 @@ bool equalVectors(vector<T> a, vector<T> b) {
     return true;
 }
 
-TEST(hw8HashedAddTest3, addDictionaryTest1) {
+TEST(hw8HashedAddTest3, addDictionaryTest1)
+{
+
     DictionaryInterface<int, string> *dict1 = new HashedDictionary<int, string>();
 
     dict1->add(60, "F");
@@ -51,13 +53,14 @@ TEST(hw8HashedAddTest3, addDictionaryTest1) {
 
     if (!HasFailure())currentPoints_addTest += 10;
     cout << "\nCurrent POINTS test3:" << currentPoints_addTest << "/" << maxPoints << endl;
+
 }
 
 
 TEST(hw8HashedAddTest3, addDictionaryTest2) {
     DictionaryInterface<int, string> *dict1 = new HashedDictionary<int, string>();
 
-
+//    cout << "\n\nBeginning test 2 " << endl;
     dict1->add(10, "A");
     dict1->add(20, "B");
     dict1->add(121, "C");//Will get added at the same hash index as (20,B)

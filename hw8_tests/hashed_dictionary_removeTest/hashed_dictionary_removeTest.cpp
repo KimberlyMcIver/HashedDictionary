@@ -50,9 +50,11 @@ TEST(hw8HashedDictionaryTest, basicRemoveTest) {
 
     if (!HasFailure())currentPoints_removeTest += 10;
     cout << "\nCurrent POINTS test4:" << currentPoints_removeTest << "/" << maxPoints << endl;
+
 }
 
 TEST(hw8HashedDictionaryTest, basicRemoveTest2) {
+
     DictionaryInterface<int, string> *dict1 = new HashedDictionary<int, string>();
 
     EXPECT_FALSE(dict1->remove(30)) << "Remove function is incorrect";
@@ -60,9 +62,11 @@ TEST(hw8HashedDictionaryTest, basicRemoveTest2) {
 
     if (!HasFailure())currentPoints_removeTest += 10;
     cout << "\nCurrent POINTS test4:" << currentPoints_removeTest << "/" << maxPoints << endl;
+
 }
 
 TEST(hw8HashedDictionaryTest, basicRemoveTest3) {
+
     DictionaryInterface<int, string> *dict1 = new HashedDictionary<int, string>();
 
     dict1->add(10, "A");
@@ -72,6 +76,10 @@ TEST(hw8HashedDictionaryTest, basicRemoveTest3) {
 
     vector<string> v1 = dict1->toVector();
     vector<string> v2 = {"A", "C"};
+
+    cout << "Compare: " << v1.at(0) << " to " << v2.at(0) << endl;
+    cout << "Compare: " << v1.at(1) << " to " << v2.at(1) << endl;
+
 
     EXPECT_TRUE(equalVectors(v1, v2)) << "Vectors after remove are not equal";
 
@@ -85,5 +93,6 @@ TEST(hw8HashedDictionaryTest, basicRemoveTest3) {
 
     if (!HasFailure())currentPoints_removeTest += 10;
     cout << "\nCurrent POINTS test4:" << currentPoints_removeTest << "/" << maxPoints << endl;
+
 }
 

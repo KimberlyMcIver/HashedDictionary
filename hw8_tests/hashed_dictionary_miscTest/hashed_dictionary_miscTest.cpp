@@ -96,6 +96,7 @@ TEST(hw8HashedDictionaryTest, getItemTest) {
 }
 
 TEST(hw8HashedDictionaryTest, containsTest) {
+
     DictionaryInterface<int, string> *dict1 = new HashedDictionary<int, string>();
 
     dict1->add(60, "F");
@@ -113,6 +114,7 @@ TEST(hw8HashedDictionaryTest, containsTest) {
 
     if (!HasFailure())currentPoints_miscTest += 10;
     cout << "\nCurrent POINTS test5:" << currentPoints_miscTest << "/" << maxPoints << endl;
+
 }
 
 TEST(hw8HashedDictionaryTest, destroyTest) {

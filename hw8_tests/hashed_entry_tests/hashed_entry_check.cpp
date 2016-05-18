@@ -16,6 +16,7 @@ int maxPoints = 30;
 
 TEST(hw8HashedEntryTest, basicHashedEntryTest) {
 
+    cout << "\n\nBeginning basic hashed entry test 1" << endl;
     HashedEntry<int, string> he1(1, "data1");
     HashedEntry<int, string> he2(2, "data2");
 
@@ -28,6 +29,7 @@ TEST(hw8HashedEntryTest, basicHashedEntryTest) {
 }
 
 TEST(hw8HashedEntryTest, basicHashedEntryTest2) {
+    cout << "\n\nBeginning basic hashed entry test 2" << endl;
 
     HashedEntry<int, string> he1(1, "data1");
     HashedEntry<int, string> he2(2, "data2");
@@ -44,6 +46,7 @@ TEST(hw8HashedEntryTest, basicHashedEntryTest2) {
 }
 
 TEST(hw8HashedEntryTest, basicHashedEntryTest3) {
+    cout << "\n\nBeginning basic hashed entry test 3" << endl;
 
     HashedEntry<int, string> he1(1, "data1");
     HashedEntry<int, string> he2(2, "data2");
@@ -59,12 +62,14 @@ TEST(hw8HashedEntryTest, basicHashedEntryTest3) {
     he1.setItem("newItem");
     EXPECT_EQ(he1.getItem(), "newItem") << "check your setItem function";
 
+
     he1.setNext(&he2);
     EXPECT_EQ(he2.getItem(), he1.getNext()->getItem()) << "Check your setNext function";
     EXPECT_EQ(nullptr, he1.getNext()->getNext());
 
     he2 = "overloadedItem";
     EXPECT_EQ(he2.getItem(), "overloadedItem") << "Overloaded operator is failing, check your setNext function";
+
 
     if (!HasFailure())currentPoints_test1 += 10;
     cout << "\nCurrent POINTS test1:" << currentPoints_test1 << "/" << maxPoints << endl;
